@@ -1,6 +1,7 @@
 html = Nokogiri.HTML(content)
 
-products = html.css('._octopus-search-result-card_style_apbSearchResultItem__2-mx4')
+products = html.xpath("//div[starts-with(@cel_widget_id, 'MAIN-SEARCH_RESULTS')]")
+
 
 products.each do |product|
     url_elem = html.at_css('.a-link-normal.s-underline-text.s-underline-link-text.a-text-normal')['href']
@@ -18,3 +19,24 @@ products.each do |product|
     }
 
 end
+
+
+next_btn_elem = html.at_css('.s-pagination-next')
+if next_btn_elem
+    url_element = next_btn_elem['href']
+    if url_element
+        url =  "https://www.amazon.com/#{url_element}"
+        pages << {
+            page_type: "listings",
+            method: "GET",
+            headers: {"User-Agent" => "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"},
+            url: url,
+            vars: {
+                category: page['vars']['category']
+            }
+        }
+    end
+end
+
+    
+
