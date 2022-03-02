@@ -6,7 +6,7 @@ products = html.xpath("//div[starts-with(@cel_widget_id, 'MAIN-SEARCH_RESULTS')]
 products.each do |product|
     url_elem = html.at_css('.a-link-normal.s-underline-text.s-underline-link-text.a-text-normal')['href']
     url_regex = url_elem.gsub(/\/ref=.*$/, '')
-    url =  "https://www.amazon.com/#{url_regex}"
+    url =  "https://www.amazon.com#{url_regex}"
 
     pages << {
         url: url,
@@ -20,12 +20,12 @@ products.each do |product|
 
 end
 
+page_links = html.css('.s-pagination-container a')
 
-next_btn_elem = html.at_css('.s-pagination-next')
-if next_btn_elem
-    url_element = next_btn_elem['href']
+page_links.each do |link|
+    url_element = link['href']
     if url_element
-        url =  "https://www.amazon.com/#{url_element}"
+        url =  "https://www.amazon.com#{url_element}"
         pages << {
             page_type: "listings",
             method: "GET",
@@ -37,6 +37,7 @@ if next_btn_elem
         }
     end
 end
+
 
     
 
